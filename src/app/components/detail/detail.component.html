@@ -1,0 +1,55 @@
+<div class="detail-container" *ngIf="(detailStateObserver$ | async)">
+  <app-loader-indicator [show]="processingDetailData$|async" ></app-loader-indicator>
+  <div class="detail-header">
+    <img class="rounded-circle" src="{{(detailStateObserver$ | async)?.sprites?.front_default}}">
+    <h1 class="text-info">{{(detailStateObserver$ | async)?.name}}</h1>
+  </div>
+  <div class="container mt-3">
+      <ul class="nav nav-tabs">
+          <li class="nav-item">
+              <a class="nav-link" [ngClass]="{'active': currentTab ===1}" data-toggle="tab" (click)="setCurrentTab(1)" href="#menu1">Stats</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" [ngClass]="{'active': currentTab ===2}" (click)="setCurrentTab(2)" href="#home">Abilities</a>
+          </li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div class="tab-pane active container" *ngIf="currentTab === 1" id="menu1">
+                <ul class="list-group abilities-list">
+                    <li class="list-group-item" *ngFor="let stat of (detailStateObserver$ | async)?.stats">
+                      <div class="vertical-arrange text-secondary">
+                        <span>{{stat.stat.name}}</span>
+                        <span>{{stat.base_stat}}</span>
+                      </div>
+                      <div class="progress">
+                          <div class="progress-bar progress-bar-striped"
+                              role="progressbar"
+                              [style.width.%]="stat.base_stat"
+                              [ngClass]="{'bg-danger':stat.base_stat <= 20, 'bg-warning':stat.base_stat <= 50, 'bg-success':stat.base_stat <= 1000}"
+                              aria-valuenow="stat.base_stat" aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                    </li>
+                </ul>
+            </div>
+
+          <div class="tab-pane active container" *ngIf="currentTab === 2" id="home">
+            <ul class="list-group abilities-list">
+              <li class="list-group-item vertical-arrange" *ngFor="let ability of (detailStateObserver$ | async)?.abilities">
+                <span>{{ability.ability.name}}</span>
+                <span *ngIf="ability.is_hidden" class="text-danger">Hidden</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+  </div>
+</div>
+<!-- if there is no selection yet show this template-->
+<div class="detail-container" *ngIf="!(detailStateObserver$ | async)">
+  <div class="card no-selection">
+    <div class="card-body">
+      <h5 class="card-title">Choose a pokemon to see its characteristics</h5>
+    </div>
+  </div>
+</div>

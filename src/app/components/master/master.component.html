@@ -1,0 +1,15 @@
+<div class="master-container">
+  <div class="wrapper-scroll-y grid-scrollbar">
+    <div class="tiles-container" *ngIf="(pokemonObservable$|async).pokemonList">
+      <div class="card"  *ngFor="let pokemon of (pokemonObservable$|async).pokemonList.results">
+        <div (click)= "onPokemonSelected($event, pokemon.id)">
+          <div class="card-body">
+            <img src="{{pokemon.spriteUrl}}">
+          </div>
+          <div class="card-footer footer">{{pokemon.name}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-loader-indicator [show]="(pokemonObservable$|async).processingMaster"></app-loader-indicator>
+</div>

@@ -1,0 +1,18 @@
+.master-detail-container {
+  justify-content: center;
+  .container-header {
+    height: 10vh;
+    text-align: center;
+  }
+  .master-detail-container {
+    display: flex;
+    width: 100%;
+    height: 90vh;
+    .master {
+      width: 60%;
+    }
+    .detail {
+      width: 35%;
+    }
+  }
+}
