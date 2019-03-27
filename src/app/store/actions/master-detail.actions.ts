@@ -7,7 +7,8 @@ export enum MasterDetailActionTypes {
   StartAppendMasterDetails = '[MasterDetail] Starting Adding More Pokemons to master list',
   EndAppendMasterDetails = '[MasterDetail] Ending Adding More Pokemons to master list',
   StartGetDetail = '[MasterDetail] Starting action to get pokemon detail',
-  EndGetDetail = '[MasterDetail] Ending action to get pokemon detail'
+  EndGetDetail = '[MasterDetail] Ending action to get pokemon detail',
+  OnError = '[MasterDetail] On Error'
 }
 
 
@@ -61,8 +62,18 @@ export class EndGetDetail implements Action {
 
 }
 
+export class OnError implements Action {
+  readonly type = MasterDetailActionTypes.OnError;
+  payLoad: string;
+
+  constructor(payload: string) {
+    this.payLoad = payload;
+  }
+}
+
 
 export type MasterDetailActions = StartLoadMasterDetails |
                                   EndLoadMasterDetails |
                                   StartGetDetail |
-                                  EndGetDetail;
+                                  EndGetDetail |
+                                  OnError;

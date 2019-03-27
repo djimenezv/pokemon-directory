@@ -2,14 +2,15 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
 import { Observable, of} from 'rxjs';
-import { switchMap, flatMap, concatMap } from 'rxjs/operators';
+import { switchMap, catchError } from 'rxjs/operators';
 import { MasterDetailActionTypes,
          StartLoadMasterDetails,
          EndLoadMasterDetails,
          StartAppendMasterDetails,
          EndAppendMasterDetails,
          StartGetDetail,
-         EndGetDetail} from '../actions/master-detail.actions';
+         EndGetDetail,
+         OnError} from '../actions/master-detail.actions';
 import { PokemonService } from '../../services/pokemon.service';
 import { Pokemon } from '../../models/pokemon';
 import * as fromRoot from '../../store/reducers';
@@ -33,7 +34,8 @@ export class AppEffects implements OnDestroy {
   loadInitialPokemons$: Observable<Action> = this.actions$.pipe(
     ofType(MasterDetailActionTypes.StartLoadMasterDetails),
     switchMap((action: StartLoadMasterDetails) => this.pokemonService.getPokemons(action.payLoad.offset)),
-    switchMap(result => of(new EndLoadMasterDetails(result)))
+    switchMap(result => of(new EndLoadMasterDetails(result))),
+    catchError(err => of(new OnError(err.message)))
   );
 
   @Effect()
@@ -41,7 +43,8 @@ export class AppEffects implements OnDestroy {
     ofType(MasterDetailActionTypes.StartAppendMasterDetails),
     switchMap((action: StartAppendMasterDetails) => this.pokemonService.getPokemons(this.currentAppState.currentOffset)
                                                       .pipe(
-                                                        switchMap(result => of(new EndAppendMasterDetails(result)))
+                                                        switchMap(result => of(new EndAppendMasterDetails(result))),
+                                                        catchError(err => of(new OnError(err.message)))
                                                       ))
     );
 
@@ -50,7 +53,8 @@ export class AppEffects implements OnDestroy {
       ofType(MasterDetailActionTypes.StartGetDetail),
       switchMap((action: StartGetDetail) => this.pokemonService.getPokemonById(this.currentAppState.selectedPokemonId)
                                                         .pipe(
-                                                          switchMap((result: Pokemon) => of(new EndGetDetail(result)))
+                                                          switchMap((result: Pokemon) => of(new EndGetDetail(result))),
+                                                          catchError(err => of(new OnError(err.message)))
                                                         ))
   );
 

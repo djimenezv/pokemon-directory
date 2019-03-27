@@ -9,6 +9,7 @@ export interface State {
   currentOffset: number;
   selectedPokemonId: number;
   selectedPokemonData: Pokemon;
+  errorMessage: string;
 }
 
 export const initialState: State = {
@@ -17,7 +18,8 @@ export const initialState: State = {
   processingDetail: false,
   currentOffset: 0,
   selectedPokemonId: 0,
-  selectedPokemonData: null
+  selectedPokemonData: null,
+  errorMessage: null
 };
 
 export function reducer(state = initialState, action: Action): State {
@@ -59,12 +61,19 @@ export function reducer(state = initialState, action: Action): State {
           selectedPokemonId: selectedPokemonId
         };
     case masterDetailActions.MasterDetailActionTypes.EndGetDetail :
-        debugger;
         const queryResultDetail = (action as masterDetailActions.EndGetDetail);
         return {
           ...state,
           processingDetail: false,
           selectedPokemonData: queryResultDetail.payLoad
+        };
+    case masterDetailActions.MasterDetailActionTypes.OnError:
+        const queryResultError = (action as masterDetailActions.OnError);
+        return {
+          ...state,
+          processingDetail: false,
+          processingMaster: false,
+          errorMessage: queryResultError.payLoad
         };
 
     default:
