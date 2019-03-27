@@ -1,6 +1,8 @@
 # Pokemon
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.6.
+This is a pokemon directory application that gets data from the poke-api (https://pokeapi.co/) the application was developed using ngrx to handle the state of the application additionally use angular 7 and bootstrap 4.
+
+![pokemon-directory](https://user-images.githubusercontent.com/18702110/54886384-75f9c280-4e55-11e9-8009-470e9a279a55.jpeg)
 
 ## Development server
 
